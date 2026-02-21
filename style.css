@@ -12,11 +12,11 @@
   --border: #e2e2e0;
   --text: #1a1a1a;
   --muted: #8a8a85;
-  --accent: #1a1a1a;
-  --accent-hover: #333;
+  --accent: #1a4fa0;
+  --accent-hover: #153d82;
   --error: #d94f4f;
   --radius: 8px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.05);
 }
 
 /* Base */
@@ -46,22 +46,35 @@ body {
   box-shadow: var(--shadow);
 }
 
-/* Logo & Brand */
-.logo {
-  font-size: 24px;
-  display: block;
+/* Brand */
+.brand-wrap {
   text-align: center;
-  margin-bottom: 4px;
-  color: var(--text);
+  margin-bottom: 28px;
+}
+
+.uc-logo {
+  width: 50px;
+  height: auto;
+  display: block;
+  margin: 0 auto 10px auto;
 }
 
 .brand {
-  font-size: 18px;
-  font-weight: 600;
-  text-align: center;
-  letter-spacing: -0.01em;
-  margin-bottom: 28px;
+  font-size: 15px;
+  font-weight: 700;
   color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.brand span {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-top: 2px;
 }
 
 /* Tabs */
@@ -69,7 +82,6 @@ body {
   display: flex;
   border-bottom: 1px solid var(--border);
   margin-bottom: 28px;
-  gap: 0;
 }
 
 .tab {
@@ -91,8 +103,8 @@ body {
 }
 
 .tab.active {
-  color: var(--text);
-  border-bottom-color: var(--text);
+  color: var(--accent);
+  border-bottom-color: var(--accent);
 }
 
 /* Forms */
@@ -137,8 +149,8 @@ input::placeholder {
 }
 
 input:focus {
-  border-color: var(--text);
-  box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.06);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(26, 79, 160, 0.08);
 }
 
 input.invalid {
@@ -168,7 +180,7 @@ input.invalid {
 }
 
 .forgot a:hover {
-  color: var(--text);
+  color: var(--accent);
 }
 
 /* Button */
@@ -185,7 +197,6 @@ input.invalid {
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
   margin-top: 4px;
-  letter-spacing: 0.01em;
 }
 
 .btn:hover {
@@ -205,7 +216,7 @@ input.invalid {
 }
 
 .switch-text a {
-  color: var(--text);
+  color: var(--accent);
   text-decoration: none;
   font-weight: 500;
 }

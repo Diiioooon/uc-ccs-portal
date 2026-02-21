@@ -4,169 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>University of Cebu – Auth</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #f5f5f4;
-      --white: #ffffff;
-      --border: #e2e2e0;
-      --text: #1a1a1a;
-      --muted: #8a8a85;
-      --accent: #1a4fa0;
-      --accent-hover: #153d82;
-      --error: #d94f4f;
-      --radius: 8px;
-      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.05);
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .container { width: 100%; max-width: 400px; }
-
-    .card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 40px 36px;
-      box-shadow: var(--shadow);
-    }
-
-    .brand-wrap { text-align: center; margin-bottom: 28px; }
-
-    .logo {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      background: var(--accent);
-      border-radius: 10px;
-      margin-bottom: 10px;
-    }
-
-    .logo svg { width: 22px; height: 22px; fill: white; }
-
-    .brand {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.01em;
-      line-height: 1.3;
-    }
-
-    .brand span {
-      display: block;
-      font-size: 11px;
-      font-weight: 400;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
-
-    .tabs {
-      display: flex;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 28px;
-    }
-
-    .tab {
-      flex: 1;
-      padding: 10px 0;
-      background: none;
-      border: none;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--muted);
-      cursor: pointer;
-      transition: color 0.2s, border-color 0.2s;
-    }
-
-    .tab:hover { color: var(--text); }
-    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
-    .form { display: none; flex-direction: column; gap: 16px; }
-    .form.active { display: flex; }
-
-    .field { display: flex; flex-direction: column; gap: 6px; }
-
-    label { font-size: 13px; font-weight: 500; color: var(--text); }
-
-    input {
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 14px;
-      font-family: inherit;
-      color: var(--text);
-      background: var(--white);
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      width: 100%;
-    }
-
-    input::placeholder { color: #c0c0bc; }
-    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,79,160,0.08); }
-    input.invalid { border-color: var(--error); box-shadow: 0 0 0 3px rgba(217,79,79,0.08); }
-
-    .error { font-size: 12px; color: var(--error); min-height: 16px; display: block; }
-
-    .forgot { text-align: right; margin-top: -6px; }
-    .forgot a { font-size: 12px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-    .forgot a:hover { color: var(--accent); }
-
-    .btn {
-      width: 100%;
-      padding: 11px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius);
-      font-size: 14px;
-      font-weight: 500;
-      font-family: inherit;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      margin-top: 4px;
-    }
-
-    .btn:hover { background: var(--accent-hover); }
-    .btn:active { transform: scale(0.99); }
-
-    .switch-text { text-align: center; font-size: 13px; color: var(--muted); margin-top: 4px; }
-    .switch-text a { color: var(--accent); text-decoration: none; font-weight: 500; }
-    .switch-text a:hover { text-decoration: underline; }
-
-    .toast {
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%) translateY(8px);
-      background: #1a1a1a;
-      color: #fff;
-      font-size: 13px;
-      padding: 10px 20px;
-      border-radius: 100px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease, transform 0.25s ease;
-      white-space: nowrap;
-    }
-
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -174,12 +12,13 @@
     <div class="card">
 
       <div class="brand-wrap">
-        <div class="logo">
-          <svg viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18L20 8.5v7L12 19.82 4 15.5v-7L12 4.18z"/></svg>
+        <div class="logos">
+          <img class="uc-logo"  src="uclogo.png" alt="University of Cebu" />
+          <img class="ccs-logo" src="ccsmainlogo.png" alt="College of Computer Studies" />
         </div>
         <div class="brand">
           University of Cebu
-          <span>Student Portal</span>
+          <span>College of Computer Studies – Student Portal</span>
         </div>
       </div>
 
@@ -191,7 +30,7 @@
       <form id="login" class="form active" novalidate>
         <div class="field">
           <label for="login-email">Email</label>
-          <input id="login-email" type="email" placeholder="you@uccebu.edu.ph" autocomplete="email" />
+          <input id="login-email" type="email" placeholder="you@ucebu.edu.ph" autocomplete="email" />
           <span class="error" id="login-email-error"></span>
         </div>
         <div class="field">
@@ -207,7 +46,7 @@
       <form id="register" class="form" novalidate>
         <div class="field">
           <label for="reg-name">Full Name</label>
-          <input id="reg-name" type="text" placeholder="Full Name" autocomplete="name" />
+          <input id="reg-name" type="text" placeholder="Juan dela Cruz" autocomplete="name" />
           <span class="error" id="reg-name-error"></span>
         </div>
         <div class="field">
@@ -233,90 +72,6 @@
   </div>
 
   <div class="toast" id="toast"></div>
-
-  <script>
-    const tabs = document.querySelectorAll('.tab');
-    const forms = document.querySelectorAll('.form');
-
-    function switchTab(tabName) {
-      tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
-      forms.forEach(f => f.classList.toggle('active', f.id === tabName));
-      clearAllErrors();
-    }
-
-    tabs.forEach(tab => tab.addEventListener('click', () => switchTab(tab.dataset.tab)));
-    document.querySelectorAll('[data-switch]').forEach(link => {
-      link.addEventListener('click', e => { e.preventDefault(); switchTab(link.dataset.switch); });
-    });
-
-    function showError(inputId, message) {
-      document.getElementById(inputId).classList.add('invalid');
-      const err = document.getElementById(inputId + '-error');
-      if (err) err.textContent = message;
-    }
-
-    function clearAllErrors() {
-      document.querySelectorAll('input').forEach(i => i.classList.remove('invalid'));
-      document.querySelectorAll('.error').forEach(e => e.textContent = '');
-    }
-
-    function isValidEmail(email) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-
-    document.querySelectorAll('input').forEach(input => {
-      input.addEventListener('input', () => {
-        input.classList.remove('invalid');
-        const err = document.getElementById(input.id + '-error');
-        if (err) err.textContent = '';
-      });
-    });
-
-    function showToast(message, duration = 3000) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), duration);
-    }
-
-    document.getElementById('login').addEventListener('submit', function (e) {
-      e.preventDefault();
-      clearAllErrors();
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value;
-      let valid = true;
-
-      if (!email) { showError('login-email', 'Email is required.'); valid = false; }
-      else if (!isValidEmail(email)) { showError('login-email', 'Please enter a valid email.'); valid = false; }
-      if (!password) { showError('login-password', 'Password is required.'); valid = false; }
-      if (!valid) return;
-
-      showToast('Signed in successfully!');
-      this.reset();
-    });
-
-    document.getElementById('register').addEventListener('submit', function (e) {
-      e.preventDefault();
-      clearAllErrors();
-      const name     = document.getElementById('reg-name').value.trim();
-      const email    = document.getElementById('reg-email').value.trim();
-      const password = document.getElementById('reg-password').value;
-      const confirm  = document.getElementById('reg-confirm').value;
-      let valid = true;
-
-      if (!name) { showError('reg-name', 'Name is required.'); valid = false; }
-      if (!email) { showError('reg-email', 'Email is required.'); valid = false; }
-      else if (!isValidEmail(email)) { showError('reg-email', 'Please enter a valid email.'); valid = false; }
-      if (!password) { showError('reg-password', 'Password is required.'); valid = false; }
-      else if (password.length < 8) { showError('reg-password', 'Password must be at least 8 characters.'); valid = false; }
-      if (!confirm) { showError('reg-confirm', 'Please confirm your password.'); valid = false; }
-      else if (password && confirm !== password) { showError('reg-confirm', 'Passwords do not match.'); valid = false; }
-      if (!valid) return;
-
-      showToast('Account created! You can now sign in.');
-      this.reset();
-      setTimeout(() => switchTab('login'), 1500);
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
