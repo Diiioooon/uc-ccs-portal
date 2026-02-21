@@ -34,7 +34,7 @@ body {
 /* Container */
 .container {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
 }
 
 /* Card */
@@ -52,11 +52,24 @@ body {
   margin-bottom: 28px;
 }
 
+.logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+/* UC Logo */
 .uc-logo {
-  width: 50px;
+  width: 72px;
   height: auto;
-  display: block;
-  margin: 0 auto 10px auto;
+}
+
+/* CCS Logo — change width here to resize */
+.ccs-logo {
+  width: 64px;
+  height: auto;
 }
 
 .brand {
