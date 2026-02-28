@@ -1,137 +1,161 @@
-// ─── Tab Switching ───────────────────────────────────────────────────────────
+// ─── Toast Notification ──────────────────────────────────────────────────────
 
-const tabs = document.querySelectorAll('.tab');
-const forms = document.querySelectorAll('.form');
+function showToast(message) {
+  var toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
 
-function switchTab(tabName) {
-  tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
-  forms.forEach(f => f.classList.toggle('active', f.id === tabName));
-  clearAllErrors();
+  setTimeout(function() {
+    toast.classList.remove('show');
+  }, 3000);
 }
 
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => switchTab(tab.dataset.tab));
-});
 
-document.querySelectorAll('[data-switch]').forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    switchTab(link.dataset.switch);
-  });
-});
-
-
-// ─── Validation Helpers ──────────────────────────────────────────────────────
+// ─── Error Helpers ───────────────────────────────────────────────────────────
 
 function showError(inputId, message) {
-  const input = document.getElementById(inputId);
-  const error = document.getElementById(inputId + '-error');
+  var input = document.getElementById(inputId);
+  var errorSpan = document.getElementById(inputId + '-error');
   input.classList.add('invalid');
-  if (error) error.textContent = message;
+  errorSpan.textContent = message;
 }
 
-function clearAllErrors() {
-  document.querySelectorAll('input').forEach(i => i.classList.remove('invalid'));
-  document.querySelectorAll('.error').forEach(e => e.textContent = '');
+function clearErrors() {
+  var inputs = document.querySelectorAll('input');
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].classList.remove('invalid');
+  }
+
+  var errors = document.querySelectorAll('.error');
+  for (var i = 0; i < errors.length; i++) {
+    errors[i].textContent = '';
+  }
 }
 
 function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  return email.includes('@') && email.includes('.');
 }
 
-document.querySelectorAll('input').forEach(input => {
-  input.addEventListener('input', () => {
-    input.classList.remove('invalid');
-    const errEl = document.getElementById(input.id + '-error');
-    if (errEl) errEl.textContent = '';
-  });
-});
-
-
-// ─── Toast ───────────────────────────────────────────────────────────────────
-
-function showToast(message, duration = 3000) {
-  const toast = document.getElementById('toast');
-  toast.textContent = message;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), duration);
+// Clear error when user starts typing
+var allInputs = document.querySelectorAll('input');
+for (var i = 0; i < allInputs.length; i++) {
+  allInputs[i].oninput = function() {
+    this.classList.remove('invalid');
+    var errorSpan = document.getElementById(this.id + '-error');
+    if (errorSpan) {
+      errorSpan.textContent = '';
+    }
+  };
 }
 
 
-// ─── Login ───────────────────────────────────────────────────────────────────
+// ─── Login Form ──────────────────────────────────────────────────────────────
 
-document.getElementById('login').addEventListener('submit', function (e) {
-  e.preventDefault();
-  clearAllErrors();
+var loginForm = document.getElementById('login-form');
 
-  const email = document.getElementById('login-email').value.trim();
-  const password = document.getElementById('login-password').value;
-  let valid = true;
+if (loginForm) {
+  loginForm.onsubmit = function(e) {
+    e.preventDefault();
+    clearErrors();
 
-  if (!email) {
-    showError('login-email', 'Email is required.');
-    valid = false;
-  } else if (!isValidEmail(email)) {
-    showError('login-email', 'Please enter a valid email.');
-    valid = false;
-  }
+    var email = document.getElementById('login-email').value.trim();
+    var password = document.getElementById('login-password').value;
+    var isValid = true;
 
-  if (!password) {
-    showError('login-password', 'Password is required.');
-    valid = false;
-  }
+    if (email === '') {
+      showError('login-email', 'Email is required.');
+      isValid = false;
+    } else if (!isValidEmail(email)) {
+      showError('login-email', 'Please enter a valid email.');
+      isValid = false;
+    }
 
-  if (!valid) return;
+    if (password === '') {
+      showError('login-password', 'Password is required.');
+      isValid = false;
+    }
 
-  showToast('Signed in successfully!');
-  this.reset();
-});
+    if (!isValid) {
+      return;
+    }
+
+    showToast('Signed in successfully!');
+    this.reset();
+  };
+}
 
 
-// ─── Register ────────────────────────────────────────────────────────────────
+// ─── Register Form ───────────────────────────────────────────────────────────
 
-document.getElementById('register').addEventListener('submit', function (e) {
-  e.preventDefault();
-  clearAllErrors();
+var registerForm = document.getElementById('register-form');
 
-  const name     = document.getElementById('reg-name').value.trim();
-  const email    = document.getElementById('reg-email').value.trim();
-  const password = document.getElementById('reg-password').value;
-  const confirm  = document.getElementById('reg-confirm').value;
-  let valid = true;
+if (registerForm) {
+  registerForm.onsubmit = function(e) {
+    e.preventDefault();
+    clearErrors();
 
-  if (!name) {
-    showError('reg-name', 'Name is required.');
-    valid = false;
-  }
+    var idnum    = document.getElementById('reg-idnum').value.trim();
+    var name     = document.getElementById('reg-name').value.trim();
+    var email    = document.getElementById('reg-email').value.trim();
+    var level    = document.getElementById('reg-level').value.trim();
+    var address  = document.getElementById('reg-address').value.trim();
+    var password = document.getElementById('reg-password').value;
+    var confirm  = document.getElementById('reg-confirm').value;
+    var isValid  = true;
 
-  if (!email) {
-    showError('reg-email', 'Email is required.');
-    valid = false;
-  } else if (!isValidEmail(email)) {
-    showError('reg-email', 'Please enter a valid email.');
-    valid = false;
-  }
+    if (idnum === '') {
+      showError('reg-idnum', 'ID Number is required.');
+      isValid = false;
+    }
 
-  if (!password) {
-    showError('reg-password', 'Password is required.');
-    valid = false;
-  } else if (password.length < 8) {
-    showError('reg-password', 'Password must be at least 8 characters.');
-    valid = false;
-  }
+    if (name === '') {
+      showError('reg-name', 'Name is required.');
+      isValid = false;
+    }
 
-  if (!confirm) {
-    showError('reg-confirm', 'Please confirm your password.');
-    valid = false;
-  } else if (password && confirm !== password) {
-    showError('reg-confirm', 'Passwords do not match.');
-    valid = false;
-  }
+    if (email === '') {
+      showError('reg-email', 'Email is required.');
+      isValid = false;
+    } else if (!isValidEmail(email)) {
+      showError('reg-email', 'Please enter a valid email.');
+      isValid = false;
+    }
 
-  if (!valid) return;
+    if (level === '') {
+      showError('reg-level', 'Year level is required.');
+      isValid = false;
+    }
 
-  showToast('Account created! You can now sign in.');
-  this.reset();
-  setTimeout(() => switchTab('login'), 1500);
-});
+    if (address === '') {
+      showError('reg-address', 'Address is required.');
+      isValid = false;
+    }
+
+    if (password === '') {
+      showError('reg-password', 'Password is required.');
+      isValid = false;
+    } else if (password.length < 8) {
+      showError('reg-password', 'Password must be at least 8 characters.');
+      isValid = false;
+    }
+
+    if (confirm === '') {
+      showError('reg-confirm', 'Please confirm your password.');
+      isValid = false;
+    } else if (confirm !== password) {
+      showError('reg-confirm', 'Passwords do not match.');
+      isValid = false;
+    }
+
+    if (!isValid) {
+      return;
+    }
+
+    showToast('Account created! You can now sign in.');
+    this.reset();
+
+    setTimeout(function() {
+      window.location.href = 'login.html';
+    }, 1500);
+  };
+}
