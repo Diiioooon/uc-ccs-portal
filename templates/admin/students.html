@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCS Admin | Students</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <img src="{{ url_for('static', filename='uclogo.png') }}" alt="UC" class="nav-logo" />
+      <img src="{{ url_for('static', filename='ccsmainlogo.png') }}" alt="CCS" class="nav-logo" />
+      <span class="nav-title">College of Computer Studies Admin</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('admin_home') }}">Home</a></li>
+      <li><a href="{{ url_for('admin_search') }}">Search</a></li>
+      <li><a href="{{ url_for('admin_students') }}" class="active">Students</a></li>
+      <li><a href="{{ url_for('admin_sitin') }}">Sit-in</a></li>
+      <li><a href="{{ url_for('admin_sitin_records') }}">View Sit-in Records</a></li>
+      <li><a href="{{ url_for('admin_reports') }}">Sit-in Reports</a></li>
+      <li><a href="{{ url_for('admin_feedback') }}">Feedback Reports</a></li>
+      <li><a href="{{ url_for('admin_reservation') }}">Reservation</a></li>
+      <li><a href="{{ url_for('logout') }}" class="btn-nav-logout">Log out</a></li>
+    </ul>
+  </nav>
+
+  <main class="admin-main">
+    <div class="admin-split-card">
+      <div class="split-left">
+        <div class="split-logo-circle">
+          <img src="{{ url_for('static', filename='ccsmainlogo.png') }}" alt="CCS" />
+        </div>
+        <h2 class="split-title">Students</h2>
+        <p class="split-desc">Manage all registered students in the system.</p>
+      </div>
+      <div class="split-right">
+        <h2 class="form-title">Students Information</h2>
+        <div class="table-actions">
+          <a href="{{ url_for('reset_sessions') }}" class="btn-danger"
+             onclick="return confirm('Reset all sessions to 30?')">Reset All Session</a>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID Number</th>
+                <th>Name</th>
+                <th>Year Level</th>
+                <th>Course</th>
+                <th>Remaining Session</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for s in students %}
+              <tr>
+                <td>{{ s['idnum'] }}</td>
+                <td>{{ s['lastname'] }}, {{ s['firstname'] }} {{ s['midname'] }}</td>
+                <td>{{ s['level'] }}</td>
+                <td>{{ s['course'] }}</td>
+                <td>{{ s['sessions'] }}</td>
+                <td>
+                  <a href="{{ url_for('edit_student', student_id=s['id']) }}" class="btn-edit">Edit</a>
+                  <a href="{{ url_for('delete_student', student_id=s['id']) }}" class="btn-delete"
+                     onclick="return confirm('Delete this student?')">Delete</a>
+                </td>
+              </tr>
+              {% else %}
+              <tr><td colspan="6" class="no-data">No students registered yet.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCS Admin | Sit-in</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <img src="{{ url_for('static', filename='uclogo.png') }}" alt="UC" class="nav-logo" />
+      <img src="{{ url_for('static', filename='ccsmainlogo.png') }}" alt="CCS" class="nav-logo" />
+      <span class="nav-title">College of Computer Studies Admin</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('admin_home') }}">Home</a></li>
+      <li><a href="{{ url_for('admin_search') }}">Search</a></li>
+      <li><a href="{{ url_for('admin_students') }}">Students</a></li>
+      <li><a href="{{ url_for('admin_sitin') }}" class="active">Sit-in</a></li>
+      <li><a href="{{ url_for('admin_sitin_records') }}">View Sit-in Records</a></li>
+      <li><a href="{{ url_for('admin_reports') }}">Sit-in Reports</a></li>
+      <li><a href="{{ url_for('admin_feedback') }}">Feedback Reports</a></li>
+      <li><a href="{{ url_for('admin_reservation') }}">Reservation</a></li>
+      <li><a href="{{ url_for('logout') }}" class="btn-nav-logout">Log out</a></li>
+    </ul>
+  </nav>
+
+  <main class="auth-main">
+    <div class="split-card" style="max-width:700px;">
+      <div class="split-left">
+        <div class="split-logo-circle">
+          <img src="{{ url_for('static', filename='ccsmainlogo.png') }}" alt="CCS" />
+        </div>
+        <h2 class="split-title">Sit-in</h2>
+        <p class="split-desc">Register a student's sit-in session in the laboratory.</p>
+      </div>
+      <div class="split-right">
+        <h2 class="form-title">Sit In Form</h2>
+
+        {% if error %}
+          <div class="alert-error">{{ error }}</div>
+        {% endif %}
+        {% if success %}
+          <div class="alert-success">{{ success }}</div>
+        {% endif %}
+
+        <form method="POST">
+          <div class="flat-field">
+            <label>ID Number</label>
+            <input type="text" name="idnum" placeholder="Enter student ID number" required />
+          </div>
+          <div class="flat-field">
+            <label>Purpose</label>
+            <select name="purpose" required>
+              <option value="">Select purpose</option>
+              <option>C Programming</option>
+              <option>Java</option>
+              <option>PHP</option>
+              <option>ASP.Net</option>
+              <option>C#</option>
+              <option>Research</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="flat-field">
+            <label>Lab</label>
+            <select name="lab" required>
+              <option value="">Select lab</option>
+              <option>524</option>
+              <option>526</option>
+              <option>528</option>
+              <option>530</option>
+              <option>542</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-create">Sit In</button>
+            <a href="{{ url_for('admin_sitin_records') }}" class="btn-already">View Records</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCS Admin | Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <img src="{{ url_for('static', filename='uclogo.png') }}" alt="UC" class="nav-logo" />
+      <img src="{{ url_for('static', filename='ccsmainlogo.png') }}" alt="CCS" class="nav-logo" />
+      <span class="nav-title">College of Computer Studies Admin</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('admin_home') }}" class="active">Home</a></li>
+      <li><a href="{{ url_for('admin_search') }}">Search</a></li>
+      <li><a href="{{ url_for('admin_students') }}">Students</a></li>
+      <li><a href="{{ url_for('admin_sitin') }}">Sit-in</a></li>
+      <li><a href="{{ url_for('admin_sitin_records') }}">View Sit-in Records</a></li>
+      <li><a href="{{ url_for('admin_reports') }}">Sit-in Reports</a></li>
+      <li><a href="{{ url_for('admin_feedback') }}">Feedback Reports</a></li>
+      <li><a href="{{ url_for('admin_reservation') }}">Reservation</a></li>
+      <li><a href="{{ url_for('logout') }}" class="btn-nav-logout">Log out</a></li>
+    </ul>
+  </nav>
+
+  <main class="admin-main">
+    <div class="admin-split-card">
+
+      <!-- LEFT PANEL -->
+      <div class="split-left">
+        <div class="split-logo-circle">
+          <img src="{{ url_for('static', filename='ccsmainlogo.png') }}" alt="CCS" />
+        </div>
+        <h2 class="split-title">CCS Admin</h2>
+        <p class="split-desc">College of Computer Studies Sit-in Monitoring System</p>
+        <div class="admin-stats">
+          <div class="stat-item">
+            <span class="stat-num">{{ total_students }}</span>
+            <span class="stat-lbl">Students</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">{{ current_sitin }}</span>
+            <span class="stat-lbl">Sit-in Now</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">{{ total_sitin }}</span>
+            <span class="stat-lbl">Total Sit-in</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <div class="split-right">
+
+        <!-- Chart -->
+        <h2 class="form-title">&#x1F4C8; Statistics</h2>
+        <div class="chart-wrap">
+          <canvas id="courseChart"></canvas>
+        </div>
+
+        <div id="chart-data" style="display:none;">
+          {% for c in course_counts %}
+            <span class="chart-label">{{ c['course'] }}</span>
+            <span class="chart-value">{{ c['count'] }}</span>
+          {% endfor %}
+        </div>
+
+        <hr style="margin: 24px 0; border-color: #eee;" />
+
+        <!-- Announcements -->
+        <h2 class="form-title">&#x1F4E3; Announcement</h2>
+        <form method="POST" action="{{ url_for('post_announcement') }}">
+          <textarea name="content" placeholder="New Announcement" class="announce-textarea"></textarea>
+          <button type="submit" class="btn-create" style="margin-bottom:20px;">Submit</button>
+        </form>
+
+        <h3 class="posted-title">Posted Announcements</h3>
+        {% for a in announcements %}
+          <div class="announce-item">
+            <p class="announce-meta">CCS Admin | {{ a['date'] }}</p>
+            <p class="announce-text">{{ a['content'] }}</p>
+          </div>
+          <hr style="border-color:#eee;" />
+        {% else %}
+          <p style="color:#aaa; font-size:13px;">No announcements yet.</p>
+        {% endfor %}
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var labelSpans = document.querySelectorAll('.chart-label');
+    var valueSpans = document.querySelectorAll('.chart-value');
+    var labels = [];
+    var data = [];
+    for (var i = 0; i < labelSpans.length; i++) {
+      labels.push(labelSpans[i].textContent);
+      data.push(parseInt(valueSpans[i].textContent));
+    }
+    var ctx = document.getElementById('courseChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{ data: data, backgroundColor: ['#4e73df','#e74a3b','#f6c23e','#1cc88a','#36b9cc'] }]
+      },
+      options: { responsive: true }
+    });
+  </script>
+
+</body>
+</html>

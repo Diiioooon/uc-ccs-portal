@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCS Admin | Search</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <img src="{{ url_for('static', filename='uclogo.png') }}" alt="UC" class="nav-logo" />
+      <img src="{{ url_for('static', filename='ccsmainlogo.png') }}" alt="CCS" class="nav-logo" />
+      <span class="nav-title">College of Computer Studies Admin</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('admin_home') }}">Home</a></li>
+      <li><a href="{{ url_for('admin_search') }}" class="active">Search</a></li>
+      <li><a href="{{ url_for('admin_students') }}">Students</a></li>
+      <li><a href="{{ url_for('admin_sitin') }}">Sit-in</a></li>
+      <li><a href="{{ url_for('admin_sitin_records') }}">View Sit-in Records</a></li>
+      <li><a href="{{ url_for('admin_reports') }}">Sit-in Reports</a></li>
+      <li><a href="{{ url_for('admin_feedback') }}">Feedback Reports</a></li>
+      <li><a href="{{ url_for('admin_reservation') }}">Reservation</a></li>
+      <li><a href="{{ url_for('logout') }}" class="btn-nav-logout">Log out</a></li>
+    </ul>
+  </nav>
+
+  <main class="admin-main">
+    <div class="admin-split-card">
+      <div class="split-left">
+        <div class="split-logo-circle">
+          <img src="{{ url_for('static', filename='ccsmainlogo.png') }}" alt="CCS" />
+        </div>
+        <h2 class="split-title">Search</h2>
+        <p class="split-desc">Search for a student by ID number or name.</p>
+      </div>
+      <div class="split-right">
+        <h2 class="form-title">Search Student</h2>
+        <form method="GET" action="{{ url_for('admin_search') }}" class="search-form">
+          <input type="text" name="q" placeholder="Search by ID, last name or first name..."
+                 value="{{ query }}" class="search-input" />
+          <button type="submit" class="btn-create" style="border-radius:8px; padding:10px 20px;">Search</button>
+        </form>
+
+        {% if query %}
+          <div class="table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID Number</th>
+                  <th>Name</th>
+                  <th>Year Level</th>
+                  <th>Course</th>
+                  <th>Email</th>
+                  <th>Sessions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for s in students %}
+                <tr>
+                  <td>{{ s['idnum'] }}</td>
+                  <td>{{ s['lastname'] }}, {{ s['firstname'] }} {{ s['midname'] }}</td>
+                  <td>{{ s['level'] }}</td>
+                  <td>{{ s['course'] }}</td>
+                  <td>{{ s['email'] }}</td>
+                  <td>{{ s['sessions'] }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" class="no-data">No students found.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
