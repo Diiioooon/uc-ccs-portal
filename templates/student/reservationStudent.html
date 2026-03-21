@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCS | Reservation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <img src="{{ url_for('static', filename='uclogo.png') }}" alt="UC" class="nav-logo" />
+      <img src="{{ url_for('static', filename='ccsmainlogo.png') }}" alt="CCS" class="nav-logo" />
+      <span class="nav-title">College of Computer Studies Sit-in Monitoring System</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('student_home') }}">Home</a></li>
+      <li><a href="{{ url_for('student_profile') }}">Edit Profile</a></li>
+      <li><a href="{{ url_for('student_reservation') }}" class="active">Reservation</a></li>
+      <li><a href="{{ url_for('logout') }}" class="btn-nav-logout">Log out</a></li>
+    </ul>
+  </nav>
+
+  <main class="admin-main">
+    <div class="admin-split-card">
+
+      <!-- LEFT PANEL -->
+      <div class="split-left">
+        <div class="split-logo-circle">
+          <img src="{{ url_for('static', filename='ccsmainlogo.png') }}" alt="CCS" />
+        </div>
+        <h2 class="split-title">Reservation</h2>
+        <p class="split-desc">Reserve a laboratory slot for your sit-in session.</p>
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <div class="split-right">
+        <h2 class="form-title">Make a Reservation</h2>
+
+        {% if error %}
+          <div class="alert-error">{{ error }}</div>
+        {% endif %}
+        {% if success %}
+          <div class="alert-success">{{ success }}</div>
+        {% endif %}
+
+        <form method="POST">
+          <div class="flat-field">
+            <label>Laboratory</label>
+            <select name="lab" required>
+              <option value="">Select lab</option>
+              <option>524</option>
+              <option>526</option>
+              <option>528</option>
+              <option>530</option>
+              <option>542</option>
+            </select>
+          </div>
+          <div class="flat-field">
+            <label>Purpose</label>
+            <select name="purpose" required>
+              <option value="">Select purpose</option>
+              <option>C Programming</option>
+              <option>Java</option>
+              <option>PHP</option>
+              <option>ASP.Net</option>
+              <option>C#</option>
+              <option>Research</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="flat-field">
+            <label>Date</label>
+            <input type="date" name="date" required />
+          </div>
+          <div class="flat-field">
+            <label>Time</label>
+            <input type="time" name="time" required />
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-create">Submit Reservation</button>
+            <a href="{{ url_for('student_home') }}" class="btn-already">Back</a>
+          </div>
+        </form>
+
+        <hr style="margin: 24px 0; border-color: #eee;" />
+
+        <h3 style="font-size:15px; font-weight:600; margin-bottom:12px; font-family:'Syne',sans-serif;">My Reservations</h3>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Lab</th>
+                <th>Purpose</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in reservations %}
+              <tr>
+                <td>{{ r['lab'] }}</td>
+                <td>{{ r['purpose'] }}</td>
+                <td>{{ r['date'] }}</td>
+                <td>{{ r['time'] }}</td>
+                <td>
+                  {% if r['status'] == 'Pending' %}
+                    <span class="badge badge-pending">Pending</span>
+                  {% elif r['status'] == 'Approved' %}
+                    <span class="badge badge-active">Approved</span>
+                  {% else %}
+                    <span class="badge badge-done">Rejected</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% else %}
+              <tr><td colspan="5" class="no-data">No reservations yet.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>&copy; 2026 University of Cebu — College of Computer Studies</footer>
+
+</body>
+</html>

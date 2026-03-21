@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCS | Edit Profile</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <img src="{{ url_for('static', filename='uclogo.png') }}" alt="UC" class="nav-logo" />
+      <img src="{{ url_for('static', filename='ccsmainlogo.png') }}" alt="CCS" class="nav-logo" />
+      <span class="nav-title">College of Computer Studies Sit-in Monitoring System</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('student_home') }}">Home</a></li>
+      <li><a href="{{ url_for('student_profile') }}" class="active">Edit Profile</a></li>
+      <li><a href="{{ url_for('student_reservation') }}">Reservation</a></li>
+      <li><a href="{{ url_for('logout') }}" class="btn-nav-logout">Log out</a></li>
+    </ul>
+  </nav>
+
+  <main class="auth-main">
+    <div class="split-card" style="max-width:960px; min-height:620px;">
+
+      <!-- LEFT PANEL -->
+      <div class="split-left">
+
+        <div class="profile-upload-wrap">
+          <div class="profile-glow-ring" style="width:120px; height:120px;">
+            {% if student['photo'] %}
+              <img src="{{ url_for('static', filename='uploads/' + student['photo']) }}"
+                   alt="Profile" class="profile-glow-img" id="preview-img" />
+            {% else %}
+              <div class="profile-pic-avatar" id="preview-placeholder">
+                <span>{{ student['firstname'][0] }}{{ student['lastname'][0] }}</span>
+              </div>
+              <img src="" alt="Profile" class="profile-glow-img" id="preview-img"
+                   style="display:none;" />
+            {% endif %}
+          </div>
+
+          <label for="photo-input" class="btn-upload-photo">
+            📷 Change Photo
+          </label>
+        </div>
+
+        <h2 class="split-title" style="margin-top:16px; font-family:'Syne',sans-serif;">
+          {{ student['firstname'] }} {{ student['lastname'] }}
+        </h2>
+        <p class="split-desc">{{ student['course'] }} — {{ student['level'] }}</p>
+        <p class="split-desc" style="margin-top:8px;">
+          Sessions Left: <strong style="color:#fff; font-size:20px; font-family:'Syne',sans-serif;">{{ student['sessions'] }}</strong>
+        </p>
+
+        <div style="margin-top:20px; width:100%;">
+          <div class="detail-row" style="background:rgba(255,255,255,0.08); border-radius:10px; padding:10px 14px; margin-bottom:8px;">
+            <span class="detail-label">ID Number</span>
+            <span class="detail-value">{{ student['idnum'] }}</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <div class="split-right">
+        <h2 class="form-title">Edit Profile</h2>
+
+        {% if error %}
+          <div class="alert-error">{{ error }}</div>
+        {% endif %}
+        {% if success %}
+          <div class="alert-success">{{ success }}</div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+          <input type="file" id="photo-input" name="photo"
+                 accept="image/*" style="display:none;" />
+
+          <div class="name-row">
+            <div class="flat-field">
+              <label>Last Name</label>
+              <input type="text" name="lastname" value="{{ student['lastname'] }}" required />
+            </div>
+            <div class="flat-field">
+              <label>First Name</label>
+              <input type="text" name="firstname" value="{{ student['firstname'] }}" required />
+            </div>
+          </div>
+
+          <div class="flat-field">
+            <label>Middle Name <span class="optional">(optional)</span></label>
+            <input type="text" name="midname" value="{{ student['midname'] or '' }}" />
+          </div>
+
+          <div class="flat-field">
+            <label>Email</label>
+            <input type="email" name="email" value="{{ student['email'] }}" required />
+          </div>
+
+          <div class="name-row">
+            <div class="flat-field">
+              <label>Course</label>
+              <select name="course">
+                <option {% if student['course'] == 'BSIT' %}selected{% endif %}>BSIT</option>
+                <option {% if student['course'] == 'BSCS' %}selected{% endif %}>BSCS</option>
+                <option {% if student['course'] == 'BSIS' %}selected{% endif %}>BSIS</option>
+                <option {% if student['course'] == 'ACT'  %}selected{% endif %}>ACT</option>
+              </select>
+            </div>
+            <div class="flat-field">
+              <label>Year Level</label>
+              <select name="level">
+                <option {% if student['level'] == '1st Year' %}selected{% endif %}>1st Year</option>
+                <option {% if student['level'] == '2nd Year' %}selected{% endif %}>2nd Year</option>
+                <option {% if student['level'] == '3rd Year' %}selected{% endif %}>3rd Year</option>
+                <option {% if student['level'] == '4th Year' %}selected{% endif %}>4th Year</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flat-field">
+            <label>Address</label>
+            <input type="text" name="address" value="{{ student['address'] }}" required />
+          </div>
+
+          <hr style="margin: 16px 0; border-color: #eee;" />
+          <p style="font-size:12px; font-weight:600; color:#444; margin-bottom:12px;">
+            Change Password <span class="optional">(leave blank to keep current)</span>
+          </p>
+
+          <div class="name-row">
+            <div class="flat-field">
+              <label>New Password</label>
+              <input type="password" name="new_password" placeholder="Min. 8 characters" />
+            </div>
+            <div class="flat-field">
+              <label>Confirm New Password</label>
+              <input type="password" name="confirm_password" placeholder="Repeat new password" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-create">Save Changes</button>
+            <a href="{{ url_for('student_home') }}" class="btn-already">Cancel</a>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>&copy; 2026 University of Cebu — College of Computer Studies</footer>
+
+  <script>
+    var photoInput = document.getElementById('photo-input');
+    var previewImg = document.getElementById('preview-img');
+    var placeholder = document.getElementById('preview-placeholder');
+
+    photoInput.onchange = function() {
+      var file = this.files[0];
+      if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          if (placeholder) {
+            placeholder.style.display = 'none';
+          }
+          previewImg.src = e.target.result;
+          previewImg.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+  </script>
+
+</body>
+</html>

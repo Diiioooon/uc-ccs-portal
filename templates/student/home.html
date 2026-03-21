@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCS | Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <img src="{{ url_for('static', filename='uclogo.png') }}" alt="UC" class="nav-logo" />
+      <img src="{{ url_for('static', filename='ccsmainlogo.png') }}" alt="CCS" class="nav-logo" />
+      <span class="nav-title">College of Computer Studies Sit-in Monitoring System</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('student_home') }}" class="active">Home</a></li>
+      <li><a href="{{ url_for('student_profile') }}">Edit Profile</a></li>
+      <li><a href="{{ url_for('student_reservation') }}">Reservation</a></li>
+      <li><a href="{{ url_for('logout') }}" class="btn-nav-logout">Log out</a></li>
+    </ul>
+  </nav>
+
+  <main class="student-dashboard">
+
+    <!-- LEFT: Student Info -->
+    <div class="dash-panel student-panel fade-in" style="animation-delay:0.05s">
+
+      <div class="student-card-top">
+        <div class="profile-glow-ring">
+          {% if student['photo'] %}
+            <img src="{{ url_for('static', filename='uploads/' + student['photo']) }}"
+                 alt="Profile" class="profile-glow-img" />
+          {% else %}
+            <div class="profile-pic-avatar">
+              <span>{{ student['firstname'][0] }}{{ student['lastname'][0] }}</span>
+            </div>
+          {% endif %}
+        </div>
+        <h2 class="student-name">{{ student['firstname'] | upper }} {{ student['lastname'] | upper }}</h2>
+        <p class="student-sub">{{ student['course'] }} &bull; {{ student['level'] }}</p>
+      </div>
+
+      <div class="session-badge">
+        <div class="session-ring">
+          <svg viewBox="0 0 64 64" class="session-svg">
+            <circle cx="32" cy="32" r="28" class="ring-bg" />
+            <circle cx="32" cy="32" r="28" class="ring-fill"
+              style="stroke-dasharray: {{ (student['sessions'] / 30 * 175) | round(1) }} 175;" />
+          </svg>
+          <div class="session-num">{{ student['sessions'] }}</div>
+        </div>
+        <p class="session-lbl">Sessions Left</p>
+      </div>
+
+      <div class="student-details">
+        <div class="detail-row">
+          <span class="detail-label">ID</span>
+          <span class="detail-value">{{ student['idnum'] }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Email</span>
+          <span class="detail-value">{{ student['email'] }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Address</span>
+          <span class="detail-value">{{ student['address'] }}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MIDDLE: Announcements -->
+    <div class="dash-panel announce-panel fade-in" style="animation-delay:0.1s">
+      <div class="panel-header">
+        <span class="panel-icon">📣</span>
+        <h3 class="panel-title">Announcements</h3>
+      </div>
+      <div class="panel-body">
+        {% if announcements %}
+          {% for a in announcements %}
+            <div class="announce-card">
+              <div class="announce-dot"></div>
+              <div>
+                <p class="announce-meta">CCS Admin &nbsp;·&nbsp; {{ a['date'] }}</p>
+                <p class="announce-text">{{ a['content'] }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty-state">
+            <span style="font-size:32px;">📭</span>
+            <p>No announcements yet.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- RIGHT: Rules -->
+    <div class="dash-panel rules-panel fade-in" style="animation-delay:0.15s">
+      <div class="panel-header">
+        <span class="panel-icon">📋</span>
+        <h3 class="panel-title">Rules & Regulations</h3>
+      </div>
+      <div class="panel-body">
+        <p class="rules-school-name">University of Cebu</p>
+        <p class="rules-college">College of Computer Studies</p>
+        <p class="rules-subtitle">Laboratory Rules and Regulations</p>
+        <p class="rules-intro">To avoid embarrassment and maintain camaraderie at our laboratories, please observe the following:</p>
+        <ol class="rules-list">
+          <li>Maintain silence, proper decorum, and discipline inside the Laboratory. Mobile phones and other devices must be switched off.</li>
+          <li>Games are not allowed inside the lab, including computer-related games.</li>
+          <li>Surfing the Internet is allowed only with the permission of the instructor.</li>
+          <li>Getting access to websites not related to the course is strictly prohibited.</li>
+          <li>Deleting computer files and changing system setup is a major offense.</li>
+          <li>Only officially enrolled students are allowed to use the laboratory.</li>
+          <li>Sit-in students must have a valid reason for using the computer lab.</li>
+          <li>Eating, drinking, and smoking are strictly prohibited inside.</li>
+          <li>Clean up your workstation before leaving the laboratory.</li>
+          <li>Report any damaged equipment to the laboratory administrator immediately.</li>
+        </ol>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>&copy; 2026 University of Cebu — College of Computer Studies</footer>
+
+</body>
+</html>

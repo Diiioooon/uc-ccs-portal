@@ -35,35 +35,83 @@
         </div>
         <h2 class="split-title">Reservation</h2>
         <p class="split-desc">Manage student laboratory reservations.</p>
+        <div class="student-info-box" style="margin-top:20px;">
+          <div class="info-row">
+            <span class="info-lbl">Pending</span>
+            <span class="info-val">{{ reservations | selectattr('status', 'equalto', 'Pending') | list | length }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-lbl">Approved</span>
+            <span class="info-val">{{ reservations | selectattr('status', 'equalto', 'Approved') | list | length }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-lbl">Rejected</span>
+            <span class="info-val">{{ reservations | selectattr('status', 'equalto', 'Rejected') | list | length }}</span>
+          </div>
+        </div>
       </div>
+
       <div class="split-right">
-        <h2 class="form-title">Reservation</h2>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <h2 class="form-title" style="margin-bottom:0;">Student Reservations</h2>
+          {% if reservations %}
+            <a href="{{ url_for('clear_reservations') }}"
+               class="btn-danger"
+               onclick="return confirm('Clear ALL reservation records? This cannot be undone.')">
+               🗑 Clear All
+            </a>
+          {% endif %}
+        </div>
+
         <div class="table-wrap">
           <table class="admin-table">
             <thead>
               <tr>
-                <th>ID</th>
                 <th>ID Number</th>
                 <th>Name</th>
                 <th>Lab</th>
+                <th>Purpose</th>
                 <th>Date</th>
                 <th>Time</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {% for r in reservations %}
               <tr>
-                <td>{{ r['id'] }}</td>
                 <td>{{ r['idnum'] }}</td>
                 <td>{{ r['name'] }}</td>
                 <td>{{ r['lab'] }}</td>
+                <td>{{ r['purpose'] }}</td>
                 <td>{{ r['date'] }}</td>
                 <td>{{ r['time'] }}</td>
-                <td>{{ r['status'] }}</td>
+                <td>
+                  {% if r['status'] == 'Pending' %}
+                    <span class="badge badge-pending">Pending</span>
+                  {% elif r['status'] == 'Approved' %}
+                    <span class="badge badge-active">Approved</span>
+                  {% else %}
+                    <span class="badge badge-done">Rejected</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if r['status'] == 'Pending' %}
+                    <a href="{{ url_for('approve_reservation', reservation_id=r['id']) }}"
+                       class="btn-edit"
+                       onclick="return confirm('Approve this reservation?')">Approve</a>
+                    <a href="{{ url_for('reject_reservation', reservation_id=r['id']) }}"
+                       class="btn-delete"
+                       onclick="return confirm('Reject this reservation?')">Reject</a>
+                  {% else %}
+                    <a href="{{ url_for('delete_reservation', reservation_id=r['id']) }}"
+                       class="btn-delete"
+                       onclick="return confirm('Delete this reservation?')">Delete</a>
+                  {% endif %}
+                </td>
               </tr>
               {% else %}
-              <tr><td colspan="7" class="no-data">No reservations yet.</td></tr>
+              <tr><td colspan="8" class="no-data">No reservations yet.</td></tr>
               {% endfor %}
             </tbody>
           </table>
